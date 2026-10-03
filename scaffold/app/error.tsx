@@ -1,0 +1,1 @@
+"use client";export default function ErrorPage({reset}:{error:Error&{digest?:string};reset:()=>void}){return <main className="wrap not-found"><span className="section-kicker">SOMETHING WENT WRONG</span><h1>Let’s try that again.</h1><p>The page could not be loaded just now.</p><button className="button button-dark" onClick={()=>reset()}>Try again</button></main>}
