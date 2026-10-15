@@ -409,13 +409,26 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
             <span>EG</span>
           </Link>
 
+          {/* Desktop Direct Links */}
           <nav className={`nav-links-list ${menuOpen ? "mobile-open" : ""}`}>
-            <Link href="#hero" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.home}</Link>
-            <Link href="#formation" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.education}</Link>
-            <Link href="#experience" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.experience}</Link>
-            <Link href="#skills" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.stack}</Link>
-            <Link href="#projects" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.projects}</Link>
-            <Link href="#contact" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.contact}</Link>
+            <Link href="#hero" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.home}
+            </Link>
+            <Link href="#formation" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.education}
+            </Link>
+            <Link href="#experience" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.experience}
+            </Link>
+            <Link href="#skills" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.stack}
+            </Link>
+            <Link href="#projects" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.projects}
+            </Link>
+            <Link href="#contact" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.contact}
+            </Link>
 
             {/* Language Switch Button */}
             <div className="lang-switch-pill" role="group" aria-label="Language selection">
@@ -437,7 +450,7 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
               </button>
             </div>
 
-            {/* Mobile-only CV action */}
+            {/* Drawer CV action */}
             <a
               href="/cv.pdf"
               target="_blank"
@@ -446,7 +459,7 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
               onClick={() => setMenuOpen(false)}
             >
               <FileText size={16} />
-              <span>{lang === "fr" ? "Consulter mon CV" : "View my Resume"}</span>
+              <span>{lang === "fr" ? "Consulter mon CV (PDF)" : "View my Resume (PDF)"}</span>
             </a>
           </nav>
 
@@ -460,14 +473,22 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
             >
               CV <ArrowUpRight size={14} />
             </a>
+
+            {/* Bouton 3 tirets (Menu Hamburger) visible sur Web & Mobile */}
             <button
               type="button"
-              className="nav-hamburger-mobile"
+              className="nav-hamburger-btn"
               onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu de navigation"}
               aria-expanded={menuOpen}
+              title="Menu de navigation"
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+              <div className={`hamburger-lines ${menuOpen ? "is-open" : ""}`} aria-hidden="true">
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+              </div>
+              <span className="hamburger-label">{menuOpen ? (lang === "fr" ? "Fermer" : "Close") : "Menu"}</span>
             </button>
           </div>
         </div>

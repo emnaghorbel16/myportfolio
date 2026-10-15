@@ -888,28 +888,81 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ============================================================
 /* ============================================================
-   RESPONSIVE & MOBILE NAV
+   RESPONSIVE & MOBILE NAV (3 Tirets / Hamburger Navigation)
    ============================================================ */
+.nav-hamburger-btn,
 .nav-hamburger-mobile {
-  display: none;
-  background: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  color: #334155;
+  color: #0f172a;
   cursor: pointer;
-  padding: 6px 8px;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.18s ease;
-}
-.nav-hamburger-mobile:hover {
-  background: #eff6ff;
-  border-color: #bfdbfe;
-  color: #2563eb;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (max-width: 768px) {
+.nav-hamburger-btn:hover,
+.nav-hamburger-mobile:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+/* Les 3 tirets du menu (Three horizontal dashes) */
+.hamburger-lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 18px;
+  height: 13px;
+  position: relative;
+}
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 4px;
+  transition: transform 0.22s ease, opacity 0.18s ease;
+}
+
+/* Transformation des 3 tirets en croix de fermeture quand ouvert */
+.hamburger-lines.is-open .hamburger-line:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.hamburger-lines.is-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-lines.is-open .hamburger-line:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+.hamburger-label {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 961px) {
+  .nav-hamburger-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 960px) {
   .desktop-cv-btn { display: none !important; }
+  .nav-hamburger-btn,
   .nav-hamburger-mobile { display: inline-flex; }
 
   .nav-links-list {
