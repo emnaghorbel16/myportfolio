@@ -19,7 +19,8 @@ import {
   Copy,
   Check,
   Menu,
-  X
+  X,
+  Download
 } from "lucide-react";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
@@ -61,6 +62,7 @@ export function PortfolioView({
     github_url: profile?.github_url || "https://github.com/emna1ghorbel",
     linkedin_url: profile?.linkedin_url || "https://linkedin.com",
     short_bio: profile?.short_bio || "",
+    cv_url: profile?.cv_url || "",
   };
 
   const t = {
@@ -88,6 +90,7 @@ export function PortfolioView({
         bio: "Élève-ingénieure à l'ENIS (École Nationale d'Ingénieurs de Sfax). Passionnée par la conception de plateformes web & ERP modernes et le développement de systèmes d'IA innovants (RAG, agents LLM, vision). À la recherche d'un stage de fin d'études (PFE).",
         exploreBtn: "Explorer mes projets",
         contactBtn: "Me contacter",
+        downloadCV: "Télécharger mon CV",
         copyEmail: "Copier mon email",
         emailCopied: "Email copié ! ✨",
         stats: [
@@ -242,6 +245,7 @@ export function PortfolioView({
         bio: "Computer engineering student at ENIS (National Engineering School of Sfax). Specialized in full-stack web/ERP platforms (Next.js, PostgreSQL, Docker) and advanced AI systems (RAG, LLM agents, computer vision). Seeking an end-of-studies internship (PFE).",
         exploreBtn: "Explore my projects",
         contactBtn: "Get in touch",
+        downloadCV: "Download my CV",
         copyEmail: "Copy my email",
         emailCopied: "Email copied! ✨",
         stats: [
@@ -548,6 +552,18 @@ export function PortfolioView({
                   {cur.hero.exploreBtn}
                   <ChevronRight size={17} />
                 </Link>
+                {p.cv_url && (
+                  <a
+                    href={p.cv_url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary-glass"
+                  >
+                    <Download size={15} />
+                    <span>{cur.hero.downloadCV}</span>
+                  </a>
+                )}
                 <button
                   type="button"
                   onClick={() => {
