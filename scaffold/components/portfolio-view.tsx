@@ -449,10 +449,6 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                   alt={p.name}
                   className="hero-photo"
                 />
-                <div className="hero-availability-badge">
-                  <span className="status-pulse-dot" />
-                  <span>{cur.hero.status}</span>
-                </div>
               </div>
               <div className="hero-social-row">
                 <a href={`mailto:${p.email}`} className="hero-social-btn" title={p.email}>

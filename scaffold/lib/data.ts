@@ -68,8 +68,13 @@ export async function getPortfolio() {
 
   const resolvedProfile = profiles[0] || fallbackProfile;
   const resolvedCategories = categories.length > 0 ? categories.filter((c) => c.is_visible) : fallbackCategories;
-  const resolvedProjects = projects.length > 0 ? projects : fallbackProjects;
   const resolvedSkills = skills.length > 0 ? skills : fallbackSkills;
+  const existingSlugs = new Set(projects.map((p) => p.slug));
+  const mergedProjects = [
+    ...projects,
+    ...fallbackProjects.filter((fp) => !existingSlugs.has(fp.slug)),
+  ];
+  const resolvedProjects = mergedProjects.length > 0 ? mergedProjects : fallbackProjects;
   const resolvedExperience = experience.length > 0 ? experience : fallbackExperience;
   const resolvedEducation = education.length > 0 ? education : fallbackEducation;
   const resolvedSocials = socials.length > 0 ? socials : fallbackSocials;

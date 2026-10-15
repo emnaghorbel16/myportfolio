@@ -61,18 +61,7 @@ insert into public.education (institution, degree, field, description, location,
   1,
   true
 ),
-(
-  'École Nationale d''Ingénieurs de Sfax (ENIS)',
-  'Master en Systèmes Embarqués',
-  'Systèmes Embarqués & Co-conception',
-  'Formation de haut niveau suivie en parallèle : architecture des processeurs, accélération matérielle FPGA, VHDL, HLS et systèmes temps réel.',
-  'Sfax, Tunisie',
-  '2025-01-01',
-  '2026-06-30',
-  true,
-  2,
-  true
-),
+
 (
   'Institut Préparatoire aux Études d''Ingénieurs de Sfax (IPEIS)',
   'Cycle Préparatoire aux Études d''Ingénieur (Filière Technologie)',
@@ -231,6 +220,110 @@ from (values
     true,
     true,
     6
+  ),
+  (
+    'ia-deep-learning',
+    'Système de Stationnement Intelligent par Vision (Smart Parking)',
+    'smart-parking-cv',
+    'Détection et comptage de places de parking disponibles en temps réel via traitement d''images vidéo avec OpenCV et Python.',
+    'Conception d''un système de parking intelligent assisté par vision par ordinateur. Traitement du flux vidéo en direct avec découpage des zones de stationnement, seuillage adaptatif, analyse de contours et classification en temps réel (place libre vs occupée). Réduction de l''encombrement et optimisation du guidage des automobilistes.',
+    'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/smart_parkingcv',
+    '',
+    true,
+    true,
+    7
+  ),
+  (
+    'ia-deep-learning',
+    'Prédiction Météorologique & Analyse Climatique – Tunis Météo ML',
+    'tunis-meteo-ml',
+    'Modélisation prédictive et analyse de séries temporelles climatiques pour la région de Tunis avec algorithmes de Machine Learning.',
+    'Développement d''un pipeline complet de Machine Learning pour l''analyse et la prédiction des conditions météorologiques en Tunisie. Collecte et nettoyage de données historiques, ingénierie de variables (température, humidité, pression, précipitations) et entraînement de modèles de régression et séries temporelles (Random Forest, XGBoost, Scikit-learn) avec évaluation précise des métriques d''erreur (RMSE, MAE).',
+    'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/tunis_meteo_ml',
+    '',
+    false,
+    true,
+    8
+  ),
+  (
+    'ia-deep-learning',
+    'Optimisation Métaheuristique – Harris Hawks Optimization (HHO)',
+    'harris-hawks-optimization',
+    'Implémentation et benchmarking de l''algorithme bio-inspiré Harris Hawks pour l''optimisation mathématique continue et la sélection de caractéristiques.',
+    'Étude et implémentation de l''algorithme métaheuristique bio-inspiré Harris Hawks (HHO), simulant le comportement de chasse coopérative des faucons. Application à l''optimisation de fonctions mathématiques non-linéaires complexes et au feature selection en apprentissage automatique. Comparaison des taux de convergence et de la robustesse face aux algorithmes PSO et GA.',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/Harris-Hawks-Optimization',
+    '',
+    false,
+    true,
+    9
+  ),
+  (
+    'full-stack-web',
+    'Plateforme E-Commerce Full-Stack – Spring Boot & React',
+    'fullstack-ecommerce-spring',
+    'Application e-commerce complète avec backend Java Spring Boot, authentification JWT, paiements Stripe et frontend React.js Redux.',
+    'Architecture logicielle robuste pour une boutique en ligne : backend développé avec Java Spring Boot, Spring Security, authentification par tokens JWT, gestion de session et base relationnelle MySQL. Frontend moderne avec React.js, gestion d''état globale Redux Toolkit, intégration de la passerelle de paiement Stripe et mise en place d''un pipeline CI/CD automatisé.',
+    'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/fullstack-ecommerce',
+    '',
+    true,
+    true,
+    10
+  ),
+  (
+    'embarque-fpga',
+    'Système IoT Embarqué & Télémétrie Capteurs',
+    'iot-smart-system',
+    'Solution IoT connectée avec microcontrôleurs, acquisition de données capteurs multi-voies et transmission réseau basse consommation.',
+    'Développement d''un nœud de capteurs communicant en C/C++ sur microcontrôleur embarqué. Gestion de l''acquisition analogique/numérique (température, humidité, mouvement), filtrage des signaux, gestion des états de veille pour économie d''énergie et protocole de communication série/réseau avec passerelle de télémétrie.',
+    'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/iot_project',
+    '',
+    false,
+    true,
+    11
+  ),
+  (
+    'full-stack-web',
+    'Portail Humanitaire IEEE SIGHT – 1er Prix Challenge Congrès',
+    'ieee-sight-portal',
+    'Plateforme web et identité visuelle du groupe IEEE SIGHT ENIS, lauréate du 1er Prix au Challenge Sight Day.',
+    'Conception et déploiement du portail numérique vitrine pour l''initiative humanitaire IEEE SIGHT ENIS. Présentation des projets à impact social, organisation des équipes, formulaires d''engagement et mise en valeur des actions sur le terrain. Projet récompensé par la 1ère place parmi les délégations participantes.',
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/sight',
+    '',
+    false,
+    true,
+    12
+  ),
+  (
+    'full-stack-web',
+    'RBXTTF – Moteur de Rendu Typographique & Parseur TrueType',
+    'font-forge-rbx',
+    'Parseur de fichiers TrueType (TTF) ultra-rapide et moteur de rendu de texte vectoriel avec mise en cache optimisée.',
+    'Développement d''un parseur TTF binaire haute performance capable d''extraire les glyphes, tables de crénage (kern) et métriques typographiques depuis des polices vectorielles brutes. Système de rasterisation et rendu avec mise en cache dynamique des textures, réduisant considérablement la latence de tracé graphique.',
+    'https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/Font-Forge-RBX',
+    '',
+    false,
+    true,
+    13
+  ),
+  (
+    'full-stack-web',
+    'Math with Bubble – Application Ludo-éducative Interactive',
+    'math-with-bubble',
+    'Application web ludo-éducative pour l''apprentissage des mathématiques et du calcul mental avec physique de bulles animées.',
+    'Développement d''un jeu web d''apprentissage des mathématiques basé sur JavaScript interactif. Algorithme de génération dynamique d''équations mathématiques, détection de collisions, système de score et interface animée engageante pour les apprenants.',
+    'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?auto=format&fit=crop&w=1200&q=80',
+    'https://github.com/emna1ghorbel/Math-with-bubble',
+    '',
+    false,
+    true,
+    14
   )
 ) as p(cat_slug, title, slug, short_description, description, image_url, github_url, demo_url, featured, published, display_order)
 join public.categories c on c.slug = p.cat_slug;
