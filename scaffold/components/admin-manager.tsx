@@ -2,22 +2,67 @@
 
 import { useEffect, useState, useRef } from "react";
 import { supabase, type Row } from "@/lib/data";
-import { 
-  Plus, 
-  Trash2, 
-  Save, 
-  Eye, 
-  EyeOff, 
-  LoaderCircle, 
-  Upload, 
-  Image as ImageIcon, 
-  Video, 
-  FileText, 
+import {
+  Plus,
+  Trash2,
+  Save,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  Upload,
+  Image as ImageIcon,
+  Video,
+  FileText,
   X,
   ExternalLink,
   Check,
   Images
 } from "lucide-react";
+
+// ---------------------------------------------------------------------------
+// Shared upload helper: uploads directly from browser → Supabase Storage
+// Bypasses Next.js API route body-size limits (Vercel hard-caps at ~4.5 MB)
+// ---------------------------------------------------------------------------
+async function uploadFileToSupabase(file: File): Promise<string> {
+  const ext = file.name.split(".").pop() || "bin";
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const uniqueName = `${Date.now()}_${safeName}`;
+
+  // 1. Try Supabase Storage (direct browser → bucket, no size limit beyond bucket policy)
+  if (supabase) {
+    const { data, error } = await supabase.storage
+      .from("portfolio")
+      .upload(uniqueName, file, {
+        contentType: file.type || "application/octet-stream",
+        upsert: true,
+      });
+
+    if (!error && data) {
+      const { data: pub } = supabase.storage
+        .from("portfolio")
+        .getPublicUrl(uniqueName);
+      if (pub?.publicUrl) return pub.publicUrl;
+    }
+    // Log but continue to fallback
+    console.warn("[upload] Supabase Storage failed:", error?.message);
+  }
+
+  // 2. Fallback: route API (works on localhost / small files <4.5 MB on Vercel)
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const text = await res.text();
+  let json: any;
+  try { json = JSON.parse(text); } catch {
+    throw new Error(
+      res.status === 413
+        ? `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). Activez le bucket Supabase "portfolio" pour les gros fichiers.`
+        : `Erreur serveur (${res.status})`
+    );
+  }
+  if (!res.ok) throw new Error(json.error || "Erreur de téléversement");
+  return json.url;
+}
 
 interface ProjectImagesUploaderProps {
   name: string;
@@ -71,36 +116,10 @@ function ProjectImagesUploader({ name, value, onChange }: ProjectImagesUploaderP
 
     try {
       const newUrls: string[] = [];
-
       for (const file of files) {
-        const fd = new FormData();
-        fd.append("file", file);
-
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: fd,
-        });
-
-        let data: any;
-        const text = await res.text();
-        try {
-          data = JSON.parse(text);
-        } catch {
-          throw new Error(
-            res.status === 413
-              ? `"${file.name}" est trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). La limite est 50 MB.`
-              : `Erreur serveur (${res.status}) pour "${file.name}"`
-          );
-        }
-
-        if (!res.ok) {
-          throw new Error(data.error || `Erreur d'envoi pour ${file.name}`);
-        }
-        if (data.url) {
-          newUrls.push(data.url);
-        }
+        const url = await uploadFileToSupabase(file);
+        newUrls.push(url);
       }
-
       updateImages([...images, ...newUrls]);
     } catch (err: any) {
       setError(err?.message || "Impossible de téléverser les images.");
@@ -262,31 +281,8 @@ function MediaUploader({ name, value, onChange, accept = "image/*", typeLabel = 
     setError("");
 
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: fd,
-      });
-
-      let data: any;
-      const text = await res.text();
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error(
-          res.status === 413
-            ? `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). Utilisez une vidéo de moins de 50 MB.`
-            : `Erreur serveur (${res.status}). Réponse inattendue : ${text.slice(0, 80)}`
-        );
-      }
-
-      if (!res.ok) {
-        throw new Error(data.error || "Erreur de téléversement");
-      }
-
-      onChange(data.url);
+      const url = await uploadFileToSupabase(file);
+      onChange(url);
     } catch (err: any) {
       setError(err?.message || "Impossible de téléverser le fichier.");
     } finally {
@@ -294,6 +290,7 @@ function MediaUploader({ name, value, onChange, accept = "image/*", typeLabel = 
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
+
 
   return (
     <div className="media-field-container">
