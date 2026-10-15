@@ -172,24 +172,28 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
         liveDemo: "Démo en direct",
         defaultProjects: [
           {
+            slug: "systeme-multi-agents-cti-rag",
             title: "Système Multi-Agents de Cyber-Threat Intelligence avec RAG",
             desc: "Pipeline LangGraph à 4 agents intelligents (Recherche RSS, analyse IOC, scoring MITRE ATT&CK, rapport PDF). RAG hybride sur index FAISS avec Qwen 7B 4-bit et monitoring LangSmith.",
             stack: ["#Python", "#LangGraph", "#FAISS", "#Qwen7B", "#FastAPI"],
             img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "randz-medical-erp",
             title: "Randz Medical – Plateforme E-Commerce & ERP Médical",
             desc: "Plateforme en production monorepo Next.js 15, PostgreSQL 16 via Prisma 7 (46 modèles), gestion complète catalogue/commandes/factures PDF et assistant IA (Groq, Llama 3.3 70B).",
             stack: ["#Next.js15", "#PostgreSQL", "#Prisma7", "#Docker", "#Groq"],
             img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "alzheimer-detection-fpga",
             title: "Détection Précoce de la Maladie d'Alzheimer sur FPGA",
             desc: "Pipeline de co-traitement CPU-FPGA (Xilinx Zynq/Alveo) sur données IRM : modèles GNN/PointNet, LSTM temporel et accélération matérielle basse consommation avec Vivado HLS.",
             stack: ["#PyTorch", "#GNN", "#XilinxFPGA", "#VivadoHLS", "#PointNet"],
             img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "property-finder-mobile",
             title: "Property Finder – Application Immobilière Mobile",
             desc: "Application mobile multiplateforme React Native + Redux Toolkit avec synchronisation Firestore temps réel, backend Node.js et intégration de l'API OpenStreetMap.",
             stack: ["#ReactNative", "#ReduxToolkit", "#Firebase", "#NodeJS"],
@@ -322,24 +326,28 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
         liveDemo: "Live demo",
         defaultProjects: [
           {
+            slug: "systeme-multi-agents-cti-rag",
             title: "Multi-Agent Cyber-Threat Intelligence with RAG",
             desc: "4-agent LangGraph pipeline (RSS research, IOC analysis, MITRE ATT&CK mapping, PDF reports). Hybrid FAISS RAG with Qwen 7B 4-bit and LangSmith monitoring.",
             stack: ["#Python", "#LangGraph", "#FAISS", "#Qwen7B", "#FastAPI"],
             img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "randz-medical-erp",
             title: "Randz Medical – E-Commerce & Medical ERP Platform",
             desc: "Production monorepo built with Next.js 15, PostgreSQL 16 via Prisma 7 (46 models), order/invoice PDF management, and Groq Llama 3.3 70B AI assistant.",
             stack: ["#Next.js15", "#PostgreSQL", "#Prisma7", "#Docker", "#Groq"],
             img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "alzheimer-detection-fpga",
             title: "Early Alzheimer Detection on FPGA",
             desc: "CPU-FPGA hardware co-processing pipeline on MRI datasets: GNN/PointNet, temporal LSTM, and energy-efficient Vivado HLS acceleration.",
             stack: ["#PyTorch", "#GNN", "#XilinxFPGA", "#VivadoHLS", "#PointNet"],
             img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
           },
           {
+            slug: "property-finder-mobile",
             title: "Property Finder – Mobile Real Estate App",
             desc: "Cross-platform React Native + Redux Toolkit mobile app with Firestore real-time sync, Node.js backend, and OpenStreetMap geolocation.",
             stack: ["#ReactNative", "#ReduxToolkit", "#Firebase", "#NodeJS"],
@@ -663,7 +671,11 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                       </div>
                       <div className="proj-info-col">
                         <span className="proj-eyebrow">{cur.projects.eyebrow}</span>
-                        <h3 className="proj-title">{proj.title}</h3>
+                        <h3 className="proj-title">
+                          <Link href={`/projects/${proj.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {proj.title}
+                          </Link>
+                        </h3>
                         <div className="proj-desc-box">
                           {proj.short_description || "Application moderne conçue pour une expérience utilisateur rapide et intuitive."}
                         </div>
@@ -684,7 +696,11 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                     <>
                       <div className="proj-info-col">
                         <span className="proj-eyebrow">{cur.projects.eyebrow}</span>
-                        <h3 className="proj-title">{proj.title}</h3>
+                        <h3 className="proj-title">
+                          <Link href={`/projects/${proj.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {proj.title}
+                          </Link>
+                        </h3>
                         <div className="proj-desc-box">
                           {proj.short_description || "Application moderne conçue pour une expérience utilisateur rapide et intuitive."}
                         </div>
@@ -752,7 +768,11 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                       </div>
                       <div className="proj-info-col">
                         <span className="proj-eyebrow">{cur.projects.eyebrow}</span>
-                        <h3 className="proj-title">{dp.title}</h3>
+                        <h3 className="proj-title">
+                          <Link href={`/projects/${dp.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {dp.title}
+                          </Link>
+                        </h3>
                         <div className="proj-desc-box">{dp.desc}</div>
                         <div className="proj-tech-stack">
                           {dp.stack.map((stk, sIdx) => (
@@ -760,11 +780,12 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           ))}
                         </div>
                         <div className="proj-links-row">
-                          <a href="#contact" className="proj-link-icon-btn">
-                            <Github size={18} /> {cur.projects.sourceCode}
-                          </a>
-                          <a href="#contact" className="proj-link-icon-btn">
-                            <ExternalLink size={18} /> {cur.projects.liveDemo}
+                          <Link href={`/projects/${dp.slug}`} className="btn-primary-purple" style={{ padding: '0.65rem 1.5rem', fontSize: '0.85rem' }}>
+                            {cur.projects.detailsBtn}
+                            <ExternalLink size={15} />
+                          </Link>
+                          <a href="https://github.com/emna1ghorbel" target="_blank" rel="noreferrer" className="btn-secondary-glass" style={{ padding: '0.65rem 1.2rem', fontSize: '0.85rem' }}>
+                            <Github size={15} /> {cur.projects.sourceCode}
                           </a>
                         </div>
                       </div>
@@ -773,7 +794,11 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                     <>
                       <div className="proj-info-col">
                         <span className="proj-eyebrow">{cur.projects.eyebrow}</span>
-                        <h3 className="proj-title">{dp.title}</h3>
+                        <h3 className="proj-title">
+                          <Link href={`/projects/${dp.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {dp.title}
+                          </Link>
+                        </h3>
                         <div className="proj-desc-box">{dp.desc}</div>
                         <div className="proj-tech-stack">
                           {dp.stack.map((stk, sIdx) => (
@@ -781,11 +806,12 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           ))}
                         </div>
                         <div className="proj-links-row">
-                          <a href="#contact" className="proj-link-icon-btn">
-                            <Github size={18} /> {cur.projects.sourceCode}
-                          </a>
-                          <a href="#contact" className="proj-link-icon-btn">
-                            <ExternalLink size={18} /> {cur.projects.liveDemo}
+                          <Link href={`/projects/${dp.slug}`} className="btn-primary-purple" style={{ padding: '0.65rem 1.5rem', fontSize: '0.85rem' }}>
+                            {cur.projects.detailsBtn}
+                            <ExternalLink size={15} />
+                          </Link>
+                          <a href="https://github.com/emna1ghorbel" target="_blank" rel="noreferrer" className="btn-secondary-glass" style={{ padding: '0.65rem 1.2rem', fontSize: '0.85rem' }}>
+                            <Github size={15} /> {cur.projects.sourceCode}
                           </a>
                         </div>
                       </div>
@@ -795,11 +821,13 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           <span className="mockup-dot mockup-dot-yellow" />
                           <span className="mockup-dot mockup-dot-green" />
                         </div>
-                        <img 
-                          src={dp.img} 
-                          alt={dp.title} 
-                          className="mockup-img"
-                        />
+                        <Link href={`/projects/${dp.slug}`} style={{ display: 'block', overflow: 'hidden' }}>
+                          <img 
+                            src={dp.img} 
+                            alt={dp.title} 
+                            className="mockup-img"
+                          />
+                        </Link>
                       </div>
                     </>
                   )}
