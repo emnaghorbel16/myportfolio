@@ -274,3 +274,22 @@ insert into public.achievements (title, description, date, organization, display
   2,
   true
 );
+
+-- 9. CONFIGURATION DU STOCKAGE SUPABASE (STORAGE BUCKET 'portfolio')
+-- Permet de téléverser des photos et vidéos directement depuis l'admin sur Vercel
+insert into storage.buckets (id, name, public)
+values ('portfolio', 'portfolio', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Portfolio Public Select" on storage.objects;
+create policy "Portfolio Public Select" on storage.objects for select using (bucket_id = 'portfolio');
+
+drop policy if exists "Portfolio Public Insert" on storage.objects;
+create policy "Portfolio Public Insert" on storage.objects for insert with check (bucket_id = 'portfolio');
+
+drop policy if exists "Portfolio Public Update" on storage.objects;
+create policy "Portfolio Public Update" on storage.objects for update using (bucket_id = 'portfolio');
+
+drop policy if exists "Portfolio Public Delete" on storage.objects;
+create policy "Portfolio Public Delete" on storage.objects for delete using (bucket_id = 'portfolio');
+
