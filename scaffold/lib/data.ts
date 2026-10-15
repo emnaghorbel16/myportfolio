@@ -25,6 +25,9 @@ export const supabase =
           persistSession: typeof window !== "undefined",
           autoRefreshToken: typeof window !== "undefined",
         },
+        global: {
+          fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }),
+        },
       })
     : null;
 

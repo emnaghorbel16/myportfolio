@@ -28,9 +28,17 @@ interface PortfolioViewProps {
   profile: any;
   projects: any[];
   education?: any[];
+  experience?: any[];
+  skills?: any[];
 }
 
-export function PortfolioView({ profile, projects, education = [] }: PortfolioViewProps) {
+export function PortfolioView({
+  profile,
+  projects,
+  education = [],
+  experience = [],
+  skills = [],
+}: PortfolioViewProps) {
   const [lang, setLang] = useState<"fr" | "en">("fr");
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -398,6 +406,37 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
       }))
     : cur.education.defaults;
 
+  // Use custom experience if provided in Supabase, else use default experience cards
+  const displayExperience = experience.length > 0
+    ? experience
+        .filter((exp) => exp.is_visible !== false)
+        .map((exp) => {
+          let tags: string[] = [];
+          if (Array.isArray(exp.technologies)) {
+            tags = exp.technologies;
+          } else if (typeof exp.technologies === "string" && exp.technologies.trim()) {
+            tags = exp.technologies.split(/[,•|]+/).map((t: string) => t.trim()).filter(Boolean);
+          } else if (exp.tags && Array.isArray(exp.tags)) {
+            tags = exp.tags;
+          }
+
+          const period = exp.start_date
+            ? `${new Date(exp.start_date).getFullYear()} — ${exp.current ? (lang === "fr" ? "Présent" : "Present") : (exp.end_date ? new Date(exp.end_date).getFullYear() : "")}`
+            : (exp.period || "");
+
+          const companyDetails = [exp.company, exp.location, period].filter(Boolean).join(" • ");
+
+          return {
+            title: exp.position
+              ? `${exp.company ? `${exp.company} – ` : ""}${exp.position}`
+              : (exp.title || exp.company || "Expérience"),
+            company: companyDetails || exp.company || "",
+            desc: exp.description || exp.desc || "",
+            tags: tags.length > 0 ? tags : ["Tech"],
+          };
+        })
+    : cur.experience.cards;
+
   return (
     <>
       <ScrollReveal />
@@ -626,8 +665,8 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
           </div>
 
           <div className="experience-grid">
-            {cur.experience.cards.map((exp, idx) => {
-              const Icon = experienceIcons[idx] || Code2;
+            {displayExperience.map((exp, idx) => {
+              const Icon = experienceIcons[idx % experienceIcons.length] || Code2;
               return (
                 <div key={idx} className="experience-card reveal visible" style={{ transitionDelay: `${idx * 0.1}s` }}>
                   <div>
@@ -637,15 +676,17 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                       </div>
                       <div>
                         <h3 className="exp-card-title">{exp.title}</h3>
-                        <span className="exp-card-company">{exp.company}</span>
+                        {exp.company && <span className="exp-card-company">{exp.company}</span>}
                       </div>
                     </div>
                     <p className="exp-card-body">{exp.desc}</p>
-                    <div className="exp-card-tags">
-                      {exp.tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="exp-tag">{tag}</span>
-                      ))}
-                    </div>
+                    {exp.tags && exp.tags.length > 0 && (
+                      <div className="exp-card-tags">
+                        {exp.tags.map((tag: string, tIdx: number) => (
+                          <span key={tIdx} className="exp-tag">{tag}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <Link href="#projects" className="exp-learn-more-btn">

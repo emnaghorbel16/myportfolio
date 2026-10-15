@@ -535,6 +535,7 @@ export function AdminManager({ section }: { section: string }) {
       setNotice("Enregistré avec succès !");
       setEditing(null);
       await load();
+      void fetch("/api/revalidate", { method: "POST" }).catch(() => {});
     }
     setBusy(false);
   }
@@ -555,6 +556,7 @@ export function AdminManager({ section }: { section: string }) {
       } else {
         setNotice("Élément supprimé avec succès !");
         await load();
+        void fetch("/api/revalidate", { method: "POST" }).catch(() => {});
       }
     } catch (err: any) {
       setNotice(`Erreur : ${err?.message || "Suppression impossible"}`);
