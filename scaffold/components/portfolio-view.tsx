@@ -17,7 +17,10 @@ import {
   MapPin,
   ArrowDown,
   Copy,
-  Check
+  Check,
+  Menu,
+  X,
+  FileText
 } from "lucide-react";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
@@ -30,6 +33,7 @@ interface PortfolioViewProps {
 export function PortfolioView({ profile, projects, education = [] }: PortfolioViewProps) {
   const [lang, setLang] = useState<"fr" | "en">("fr");
   const [copied, setCopied] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("preferred_lang") as "fr" | "en";
@@ -401,24 +405,24 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
       {/* TOP NAVBAR */}
       <header className="figma-nav">
         <div className="site-container figma-nav-inner">
-          <Link href="/" className="brand-glyph" aria-label="Home">
+          <Link href="/" className="brand-glyph" aria-label="Home" onClick={() => setMenuOpen(false)}>
             <span>EG</span>
           </Link>
 
-          <nav className="nav-links-list">
-            <Link href="#hero" className="nav-item-link">{cur.nav.home}</Link>
-            <Link href="#formation" className="nav-item-link">{cur.nav.education}</Link>
-            <Link href="#experience" className="nav-item-link">{cur.nav.experience}</Link>
-            <Link href="#skills" className="nav-item-link">{cur.nav.stack}</Link>
-            <Link href="#projects" className="nav-item-link">{cur.nav.projects}</Link>
-            <Link href="#contact" className="nav-item-link">{cur.nav.contact}</Link>
+          <nav className={`nav-links-list ${menuOpen ? "mobile-open" : ""}`}>
+            <Link href="#hero" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.home}</Link>
+            <Link href="#formation" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.education}</Link>
+            <Link href="#experience" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.experience}</Link>
+            <Link href="#skills" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.stack}</Link>
+            <Link href="#projects" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.projects}</Link>
+            <Link href="#contact" className="nav-item-link" onClick={() => setMenuOpen(false)}>{cur.nav.contact}</Link>
 
             {/* Language Switch Button */}
             <div className="lang-switch-pill" role="group" aria-label="Language selection">
               <button 
                 type="button"
                 className={`lang-btn ${lang === "fr" ? "active" : ""}`}
-                onClick={() => switchLang("fr")}
+                onClick={() => { switchLang("fr"); setMenuOpen(false); }}
                 title="Passer en Français"
               >
                 FR
@@ -426,13 +430,46 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
               <button 
                 type="button"
                 className={`lang-btn ${lang === "en" ? "active" : ""}`}
-                onClick={() => switchLang("en")}
+                onClick={() => { switchLang("en"); setMenuOpen(false); }}
                 title="Switch to English"
               >
                 EN
               </button>
             </div>
+
+            {/* Mobile-only CV action */}
+            <a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary-purple mobile-nav-cv-btn"
+              onClick={() => setMenuOpen(false)}
+            >
+              <FileText size={16} />
+              <span>{lang === "fr" ? "Consulter mon CV" : "View my Resume"}</span>
+            </a>
           </nav>
+
+          <div className="nav-right-actions">
+            <a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary-purple desktop-cv-btn"
+              style={{ padding: "0.45rem 1rem", fontSize: "0.82rem", textDecoration: "none" }}
+            >
+              CV <ArrowUpRight size={14} />
+            </a>
+            <button
+              type="button"
+              className="nav-hamburger-mobile"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </header>
 

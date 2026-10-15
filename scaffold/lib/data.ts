@@ -69,12 +69,7 @@ export async function getPortfolio() {
   const resolvedProfile = profiles[0] || fallbackProfile;
   const resolvedCategories = categories.length > 0 ? categories.filter((c) => c.is_visible) : fallbackCategories;
   const resolvedSkills = skills.length > 0 ? skills : fallbackSkills;
-  const existingSlugs = new Set(projects.map((p) => p.slug));
-  const mergedProjects = [
-    ...projects,
-    ...fallbackProjects.filter((fp) => !existingSlugs.has(fp.slug)),
-  ];
-  const resolvedProjects = mergedProjects.length > 0 ? mergedProjects : fallbackProjects;
+  const resolvedProjects = projects.length > 0 ? projects : fallbackProjects;
   const resolvedExperience = experience.length > 0 ? experience : fallbackExperience;
   const resolvedEducation = education.length > 0 ? education : fallbackEducation;
   const resolvedSocials = socials.length > 0 ? socials : fallbackSocials;
@@ -109,15 +104,15 @@ export async function getProject(slug: string) {
         .eq("published", true)
         .maybeSingle();
 
-      if (!error && data) {
-        return data as Row;
+      if (!error) {
+        return (data ?? null) as Row | null;
       }
     } catch {
-      // Ignorer l'erreur et tenter le fallback
+      // En cas d'erreur de connexion réseau à Supabase, tenter le fallback
     }
   }
 
-  // Fallback si non trouvé dans Supabase ou si Supabase inaccessible
+  // Fallback si la requête Supabase a complètement échoué
   const fallback = fallbackProjects.find((p) => p.slug === slug);
   return (fallback ?? null) as Row | null;
 }

@@ -541,9 +541,26 @@ export function AdminManager({ section }: { section: string }) {
 
   async function remove(id: string) {
     if (!supabase || !window.confirm("Supprimer cet élément définitivement ?")) return;
-    const { error } = await supabase.from(cfg.table).delete().eq("id", id);
-    setNotice(error?.message || "Élément supprimé.");
-    await load();
+    setBusy(true);
+
+    try {
+      // Si c'est un projet, supprimer d'abord les liaisons project_technologies pour éviter les erreurs de contrainte de clé étrangère
+      if (cfg.table === "projects") {
+        await supabase.from("project_technologies").delete().eq("project_id", id);
+      }
+
+      const { error } = await supabase.from(cfg.table).delete().eq("id", id);
+      if (error) {
+        setNotice(`Erreur de suppression : ${error.message}`);
+      } else {
+        setNotice("Élément supprimé avec succès !");
+        await load();
+      }
+    } catch (err: any) {
+      setNotice(`Erreur : ${err?.message || "Suppression impossible"}`);
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (!supabase) return <p className="admin-note">Variables d'environnement Supabase requises.</p>;
