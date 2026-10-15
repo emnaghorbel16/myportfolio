@@ -459,11 +459,11 @@ export function PortfolioView({
             <Link href="#experience" className="nav-item-link" onClick={() => setMenuOpen(false)}>
               {cur.nav.experience}
             </Link>
-            <Link href="#skills" className="nav-item-link" onClick={() => setMenuOpen(false)}>
-              {cur.nav.stack}
-            </Link>
             <Link href="#projects" className="nav-item-link" onClick={() => setMenuOpen(false)}>
               {cur.nav.projects}
+            </Link>
+            <Link href="#skills" className="nav-item-link" onClick={() => setMenuOpen(false)}>
+              {cur.nav.stack}
             </Link>
             <Link href="#contact" className="nav-item-link" onClick={() => setMenuOpen(false)}>
               {cur.nav.contact}
@@ -489,30 +489,9 @@ export function PortfolioView({
               </button>
             </div>
 
-            {/* Drawer CV action */}
-            <a
-              href="/cv.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary-purple mobile-nav-cv-btn"
-              onClick={() => setMenuOpen(false)}
-            >
-              <FileText size={16} />
-              <span>{lang === "fr" ? "Consulter mon CV (PDF)" : "View my Resume (PDF)"}</span>
-            </a>
           </nav>
 
           <div className="nav-right-actions">
-            <a
-              href="/cv.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary-purple desktop-cv-btn"
-              style={{ padding: "0.45rem 1rem", fontSize: "0.82rem", textDecoration: "none" }}
-            >
-              CV <ArrowUpRight size={14} />
-            </a>
-
             {/* Bouton 3 tirets (Menu Hamburger) visible sur Web & Mobile */}
             <button
               type="button"
@@ -553,9 +532,6 @@ export function PortfolioView({
                 </a>
                 <a href={p.github_url || "https://github.com/emna1ghorbel"} target="_blank" rel="noopener noreferrer" className="hero-social-btn">
                   <Github size={16} /> GitHub
-                </a>
-                <a href="/cv.pdf" target="_blank" rel="noopener noreferrer" className="hero-social-btn" title="Consulter le CV (PDF)">
-                  📄 Mon CV
                 </a>
               </div>
             </div>
@@ -696,30 +672,6 @@ export function PortfolioView({
                 </div>
               );
             })}
-          </div>
-        </section>
-
-        {/* TECH STACK & COSMIC ORBIT SECTION */}
-        <section id="skills" className="site-container orbit-section">
-          <p className="orbit-lead-text reveal visible">
-            {cur.stack.headline} <span className="highlight-text">{cur.stack.highlight}</span> {cur.stack.headlineEnd}
-          </p>
-
-          <div className="tech-icons-row reveal visible">
-            {techStack.map((tech, i) => (
-              <span key={i} className="tech-pill-badge">
-                <span>{tech.icon}</span>
-                <span>{tech.name}</span>
-              </span>
-            ))}
-          </div>
-
-          <div className="orbit-visual-container reveal visible">
-            <div className="orbit-ring orbit-ring-2" />
-            <div className="orbit-ring orbit-ring-1" />
-            <div className="orbit-central-orb">
-              <span>EG</span>
-            </div>
           </div>
         </section>
 
@@ -933,6 +885,30 @@ export function PortfolioView({
               );
             })
           )}
+        </section>
+
+        {/* TECH STACK & PFE OBJECTIVE SECTION */}
+        <section id="skills" className="site-container orbit-section">
+          <p className="orbit-lead-text reveal visible">
+            {cur.stack.headline} <span className="highlight-text">{cur.stack.highlight}</span> {cur.stack.headlineEnd}
+          </p>
+
+          <div className="tech-icons-row reveal visible">
+            {techStack.map((tech, i) => (
+              <span key={i} className="tech-pill-badge">
+                <span>{tech.icon}</span>
+                <span>{tech.name}</span>
+              </span>
+            ))}
+          </div>
+
+          <div className="orbit-visual-container reveal visible">
+            <div className="orbit-ring orbit-ring-2" />
+            <div className="orbit-ring orbit-ring-1" />
+            <div className="orbit-central-orb">
+              <span>EG</span>
+            </div>
+          </div>
         </section>
 
         {/* CONTACT & FOOTER */}
