@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ScrollReveal } from "@/components/scroll-reveal";
 
 export const metadata: Metadata = {
-  title: "Emna Ghorbel — Computer Science Student & Developer",
-  description: "Portfolio of Emna Ghorbel — AI, Computer Vision, Cybersecurity, Full Stack development.",
+  title: "Emna Ghorbel",
+  description: "Portfolio of Emna Ghorbel.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -12,7 +11,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         {children}
-        <ScrollReveal />
       </body>
     </html>
   );
