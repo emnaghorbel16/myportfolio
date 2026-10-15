@@ -43,11 +43,26 @@ async function uploadFileToSupabase(file: File): Promise<string> {
         .getPublicUrl(uniqueName);
       if (pub?.publicUrl) return pub.publicUrl;
     }
-    // Log but continue to fallback
+    // Log Supabase error
     console.warn("[upload] Supabase Storage failed:", error?.message);
+
+    // If file is large (> 4.5 MB), do NOT fallback to Next.js API route because
+    // Vercel hard-limits serverless payloads to 4.5 MB and returns 413.
+    if (file.size > 4.5 * 1024 * 1024) {
+      const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+      const isSizeError = error?.message?.toLowerCase().includes("size") || error?.message?.toLowerCase().includes("large");
+      if (isSizeError || Number(sizeMB) > 50) {
+        throw new Error(
+          `Fichier de ${sizeMB} MB trop volumineux pour Supabase (limite plan gratuit : 50 MB par fichier). Veuillez compresser votre vidéo/fichier sous 50 MB ou coller un lien direct (YouTube, Google Drive, Cloudinary).`
+        );
+      }
+      throw new Error(
+        `Échec de téléversement Supabase (${error?.message || "Erreur inconnue"}). Vérifiez la limite du bucket "portfolio" dans Supabase Storage.`
+      );
+    }
   }
 
-  // 2. Fallback: route API (works on localhost / small files <4.5 MB on Vercel)
+  // 2. Fallback: route API (only for small files < 4.5 MB)
   const fd = new FormData();
   fd.append("file", file);
   const res = await fetch("/api/upload", { method: "POST", body: fd });
@@ -56,7 +71,7 @@ async function uploadFileToSupabase(file: File): Promise<string> {
   try { json = JSON.parse(text); } catch {
     throw new Error(
       res.status === 413
-        ? `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). Activez le bucket Supabase "portfolio" pour les gros fichiers.`
+        ? `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). Limite Vercel API dépassée.`
         : `Erreur serveur (${res.status})`
     );
   }

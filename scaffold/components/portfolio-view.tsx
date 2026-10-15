@@ -916,7 +916,7 @@ export function PortfolioView({
         <section id="contact" className="site-container section-spacer">
           <div className="contact-section-box reveal visible">
             <h2 className="section-title-figma">{cur.contact.title}</h2>
-            <p className="section-subtitle-figma" style={{ marginInline: 'auto', marginBottom: '2.5rem' }}>
+            <p className="section-subtitle-figma">
               {cur.contact.subtitle}
             </p>
 
