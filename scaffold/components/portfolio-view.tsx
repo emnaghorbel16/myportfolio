@@ -19,8 +19,7 @@ import {
   Copy,
   Check,
   Menu,
-  X,
-  FileText
+  X
 } from "lucide-react";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
