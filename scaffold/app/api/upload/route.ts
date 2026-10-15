@@ -5,6 +5,10 @@ import { existsSync } from "fs";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
+// Allow up to 50 MB per upload request
+export const maxDuration = 60;
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -25,6 +29,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Aucun fichier n'a été fourni." },
         { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). La limite est 50 MB.` },
+        { status: 413 }
       );
     }
 

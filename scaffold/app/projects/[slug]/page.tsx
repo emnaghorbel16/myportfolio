@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getProject, getProjects } from "@/lib/data";
 import { SiteShell } from "@/components/site-shell";
 import { ProjectCard } from "@/components/project-card";
+import { ProjectGallery } from "@/components/project-gallery";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -50,12 +51,19 @@ export default async function ProjectPage({
     .filter((x) => x.id !== p.id)
     .slice(0, 3);
 
+  // Extract all images (supports multi-image comma or newline separated)
+  const allImages = (p.image_url || "")
+    .split(/[\n,]+/)
+    .map((s: string) => s.trim())
+    .filter((s: string) => Boolean(s) && !s.match(/\.(mp4|webm|mov|ogg)$/i));
+
   const isImageVideo = Boolean(p.image_url?.match(/\.(mp4|webm|mov|ogg)$/i));
   const isDemoVideo = Boolean(p.demo_url?.match(/\.(mp4|webm|mov|ogg)$/i));
   const videoSource = isDemoVideo ? p.demo_url : (isImageVideo ? p.image_url : null);
-  const displayImage = !isImageVideo && p.image_url ? p.image_url : (
-    !videoSource ? "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80" : null
-  );
+  
+  const finalImages = allImages.length > 0 
+    ? allImages 
+    : (!videoSource ? ["https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80"] : []);
 
   const techs = (p.project_technologies || []).map(
     (t: any) => t.technologies?.name || t
@@ -121,44 +129,13 @@ export default async function ProjectPage({
             </div>
           </header>
 
-          {/* Media Showcase: Mockup Window with Video / Image */}
-          <section className="project-showcase-window">
-            <div className="window-header-bar">
-              <div className="window-dots">
-                <span className="dot dot-red" />
-                <span className="dot dot-yellow" />
-                <span className="dot dot-green" />
-              </div>
-              <div className="window-url-badge">
-                <span>🔒 https://emnaghorbel.dev/projects/{p.slug}</span>
-              </div>
-              <div style={{ width: 60 }} />
-            </div>
-
-            <div className="window-content-viewport">
-              {videoSource ? (
-                <div className="video-player-wrapper">
-                  <div className="video-player-badge">
-                    <Play size={13} fill="#fff" />
-                    <span>Démonstration Vidéo Interactive</span>
-                  </div>
-                  <video
-                    src={videoSource}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="featured-video-player"
-                  />
-                </div>
-              ) : displayImage ? (
-                <img
-                  src={displayImage}
-                  alt={p.title}
-                  className="featured-showcase-img"
-                />
-              ) : null}
-            </div>
-          </section>
+          {/* Media Showcase: Interactive Project Gallery with Multi-Image Support */}
+          <ProjectGallery
+            images={finalImages}
+            videoSource={videoSource}
+            title={p.title}
+            slug={p.slug}
+          />
 
           {/* Main 2-Column Content Layout */}
           <div className="project-content-grid">

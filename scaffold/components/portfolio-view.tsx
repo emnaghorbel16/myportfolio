@@ -636,6 +636,9 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
           {published.length > 0 ? (
             published.map((proj, idx) => {
               const isReversed = idx % 2 === 1;
+              const coverImage = (proj.image_url || "").split(/[\n,]+/)[0]?.trim();
+              const isCoverVideo = Boolean(coverImage?.match(/\.(mp4|webm|mov|ogg)$/i) || proj.demo_url?.match(/\.(mp4|webm|mov|ogg)$/i));
+
               return (
                 <div 
                   key={proj.id} 
@@ -649,9 +652,9 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           <span className="mockup-dot mockup-dot-yellow" />
                           <span className="mockup-dot mockup-dot-green" />
                         </div>
-                        {proj.image_url?.match(/\.(mp4|webm|mov|ogg)$/i) || proj.demo_url?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+                        {isCoverVideo ? (
                           <video 
-                            src={proj.image_url?.match(/\.(mp4|webm|mov|ogg)$/i) ? proj.image_url : proj.demo_url} 
+                            src={coverImage?.match(/\.(mp4|webm|mov|ogg)$/i) ? coverImage : proj.demo_url} 
                             controls 
                             playsInline 
                             className="mockup-img" 
@@ -659,7 +662,7 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           />
                         ) : (
                           <img 
-                            src={proj.image_url || "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80"} 
+                            src={coverImage || "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80"} 
                             alt={proj.title} 
                             className="mockup-img"
                           />
@@ -718,9 +721,9 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           <span className="mockup-dot mockup-dot-yellow" />
                           <span className="mockup-dot mockup-dot-green" />
                         </div>
-                        {proj.image_url?.match(/\.(mp4|webm|mov|ogg)$/i) || proj.demo_url?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+                        {isCoverVideo ? (
                           <video 
-                            src={proj.image_url?.match(/\.(mp4|webm|mov|ogg)$/i) ? proj.image_url : proj.demo_url} 
+                            src={coverImage?.match(/\.(mp4|webm|mov|ogg)$/i) ? coverImage : proj.demo_url} 
                             controls 
                             playsInline 
                             className="mockup-img" 
@@ -728,7 +731,7 @@ export function PortfolioView({ profile, projects, education = [] }: PortfolioVi
                           />
                         ) : (
                           <img 
-                            src={proj.image_url || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"} 
+                            src={coverImage || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80"} 
                             alt={proj.title} 
                             className="mockup-img"
                           />

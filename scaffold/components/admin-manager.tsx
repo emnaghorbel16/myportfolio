@@ -14,8 +14,228 @@ import {
   Video, 
   FileText, 
   X,
-  ExternalLink
+  ExternalLink,
+  Check,
+  Images
 } from "lucide-react";
+
+interface ProjectImagesUploaderProps {
+  name: string;
+  value: string;
+  onChange: (val: string) => void;
+}
+
+function ProjectImagesUploader({ name, value, onChange }: ProjectImagesUploaderProps) {
+  const images = value
+    ? value
+        .split(/[\n,]+/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const [urlInput, setUrlInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const updateImages = (newImages: string[]) => {
+    onChange(newImages.join(", "));
+  };
+
+  const setAsCover = (index: number) => {
+    if (index === 0) return;
+    const selected = images[index];
+    const rest = images.filter((_, i) => i !== index);
+    updateImages([selected, ...rest]);
+  };
+
+  const removeImage = (index: number) => {
+    updateImages(images.filter((_, i) => i !== index));
+  };
+
+  const addUrl = () => {
+    const trimmed = urlInput.trim();
+    if (!trimmed) return;
+    if (!images.includes(trimmed)) {
+      updateImages([...images, trimmed]);
+    }
+    setUrlInput("");
+  };
+
+  const handleMultipleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    setError("");
+
+    try {
+      const newUrls: string[] = [];
+
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append("file", file);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: fd,
+        });
+
+        let data: any;
+        const text = await res.text();
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error(
+            res.status === 413
+              ? `"${file.name}" est trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). La limite est 50 MB.`
+              : `Erreur serveur (${res.status}) pour "${file.name}"`
+          );
+        }
+
+        if (!res.ok) {
+          throw new Error(data.error || `Erreur d'envoi pour ${file.name}`);
+        }
+        if (data.url) {
+          newUrls.push(data.url);
+        }
+      }
+
+      updateImages([...images, ...newUrls]);
+    } catch (err: any) {
+      setError(err?.message || "Impossible de téléverser les images.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  return (
+    <div className="project-images-manager">
+      <input type="hidden" name={name} value={value} />
+
+      {/* Toolbar / Upload Actions */}
+      <div className="pim-toolbar">
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleMultipleFiles}
+          style={{ display: "none" }}
+        />
+
+        <button
+          type="button"
+          className="pim-upload-btn"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          {uploading ? (
+            <>
+              <LoaderCircle size={15} className="spin" />
+              <span>Téléversement de vos photos...</span>
+            </>
+          ) : (
+            <>
+              <Upload size={15} />
+              <span>📁 Ajouter des photos depuis votre PC (Sélection multiple)</span>
+            </>
+          )}
+        </button>
+
+        <div className="pim-url-row">
+          <input
+            type="text"
+            placeholder="Ou coller une URL d'image (https://...)"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addUrl();
+              }
+            }}
+          />
+          <button type="button" onClick={addUrl} className="pim-add-url-btn">
+            + Ajouter
+          </button>
+        </div>
+      </div>
+
+      {error && <div className="pim-error-msg">{error}</div>}
+
+      {/* Images List & Selection */}
+      <div className="pim-gallery-section">
+        <div className="pim-section-header">
+          <span className="pim-count-badge">
+            <Images size={13} /> {images.length} photo{images.length > 1 ? "s" : ""} dans ce projet
+          </span>
+          <span className="pim-instructions">
+            ⭐ L'image avec le badge <strong>« Couverture principale »</strong> est celle qui apparaît sur l'interface et les cartes.
+          </span>
+        </div>
+
+        {images.length === 0 ? (
+          <div className="pim-empty-box" onClick={() => fileInputRef.current?.click()}>
+            <ImageIcon size={32} />
+            <p>Aucune photo sélectionnée pour ce projet.</p>
+            <small>Cliquez pour choisir une ou plusieurs photos depuis votre ordinateur.</small>
+          </div>
+        ) : (
+          <div className="pim-cards-grid">
+            {images.map((imgUrl, idx) => {
+              const isCover = idx === 0;
+
+              return (
+                <div
+                  key={idx}
+                  className={`pim-card ${isCover ? "is-cover" : ""}`}
+                >
+                  <div className="pim-img-frame">
+                    <img src={imgUrl} alt={`Photo ${idx + 1}`} />
+                    {isCover && (
+                      <span className="pim-cover-badge">
+                        ★ Couverture (Interface)
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="pim-card-actions">
+                    {isCover ? (
+                      <span className="pim-selected-indicator">
+                        <Check size={12} /> Affichée en couverture
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        className="pim-choose-cover-btn"
+                        onClick={() => setAsCover(idx)}
+                        title="Sélectionner cette photo pour l'afficher sur l'interface principale"
+                      >
+                        ⭐ Choisir pour l'interface
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      className="pim-delete-btn"
+                      onClick={() => removeImage(idx)}
+                      title="Supprimer cette photo du projet"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 interface MediaUploaderProps {
   name: string;
@@ -50,7 +270,18 @@ function MediaUploader({ name, value, onChange, accept = "image/*", typeLabel = 
         body: fd,
       });
 
-      const data = await res.json();
+      let data: any;
+      const text = await res.text();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(
+          res.status === 413
+            ? `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} MB). Utilisez une vidéo de moins de 50 MB.`
+            : `Erreur serveur (${res.status}). Réponse inattendue : ${text.slice(0, 80)}`
+        );
+      }
+
       if (!res.ok) {
         throw new Error(data.error || "Erreur de téléversement");
       }
@@ -346,20 +577,28 @@ export function AdminManager({ section }: { section: string }) {
 
           <div className="field-grid">
             {cfg.columns.map((k) => {
+              const isProjectImages = k === "image_url" && section === "projects";
               const isMedia = ["image_url", "profile_image_url", "icon_url", "logo_url", "favicon_url"].includes(k);
               const isVideoDemo = k === "demo_url" && section === "projects";
               const isDoc = k === "cv_url";
-              const isWide = isMedia || isVideoDemo || isDoc || ["description", "about", "short_bio", "message", "seo_description"].includes(k);
+              const isWide = isProjectImages || isMedia || isVideoDemo || isDoc || ["description", "about", "short_bio", "message", "seo_description"].includes(k);
 
               return (
                 <label key={k} className={isWide ? "wide" : ""}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span>{k.replaceAll("_", " ")}</span>
+                    {isProjectImages && <small style={{ color: "#2563eb", fontWeight: 600 }}>Plusieurs photos & sélection de la couverture</small>}
                     {isVideoDemo && <small style={{ color: "#2563eb", fontWeight: 600 }}>Vidéo démo ou lien web</small>}
                   </div>
 
                   {["is_visible", "published", "featured", "current", "is_read"].includes(k) ? (
                     <input name={k} type="checkbox" defaultChecked={Boolean(editing[k])} />
+                  ) : isProjectImages ? (
+                    <ProjectImagesUploader
+                      name={k}
+                      value={editing[k] ?? ""}
+                      onChange={(newVal) => setEditing({ ...editing, [k]: newVal })}
+                    />
                   ) : isMedia ? (
                     <MediaUploader
                       name={k}
