@@ -7,15 +7,23 @@ export const supabase = url && key ? createClient(url, key, { auth: { persistSes
 const reportedTables = new Set<string>();
 async function rows(table: string, query = "*") {
   if (!supabase) return [] as Row[];
-  const { data, error } = await supabase.from(table).select(query);
-  if (error) {
+  try {
+    const { data, error } = await supabase.from(table).select(query);
+    if (error) {
+      if (!reportedTables.has(table)) {
+        reportedTables.add(table);
+        console.warn(`[Supabase] Table "${table}": ${error.message}. Données par défaut utilisées.`);
+      }
+      return [] as Row[];
+    }
+    return (data ?? []) as Row[];
+  } catch (err: any) {
     if (!reportedTables.has(table)) {
       reportedTables.add(table);
-      console.error(`Unable to load ${table}: ${error.message}. Apply supabase/schema.sql in your Supabase project's SQL Editor.`);
+      console.warn(`[Supabase] Connexion impossible (${err?.message || "fetch failed"}). Utilisation des données locales.`);
     }
     return [] as Row[];
   }
-  return (data ?? []) as Row[];
 }
 export async function getPortfolio() {
   const [profiles,categories,projects,skills,experience,education,achievements,socials] = await Promise.all([

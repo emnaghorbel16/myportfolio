@@ -31,8 +31,8 @@ export function NewContactForm() {
       <input type="text" name="name" placeholder="Your Name" required />
       <input type="email" name="email" placeholder="Your Email" required />
       <textarea name="message" placeholder="Tell me about your project..." required></textarea>
-      <button type="submit" className="new-btn new-btn-primary" disabled={status === "sending" || status === "sent"}>
-        {status === "sent" ? "Message Sent!" : status === "sending" ? "Sending..." : "Send Message"}
+      <button type="submit" className="eg-btn" disabled={status === "sending" || status === "sent"}>
+        {status === "sent" ? "✓ Message Sent!" : status === "sending" ? "Sending…" : "Send Message →"}
       </button>
       
       {status === "setup" && <p style={{ color: "red", marginTop: "10px" }}>Veuillez connecter Supabase pour recevoir des messages.</p>}
