@@ -379,16 +379,18 @@ export function PortfolioView({
   const experienceIcons = [Code2, Sparkles, Database, Layers];
 
   const techStack = [
-    { name: "React", icon: "⚛️" },
-    { name: "Next.js", icon: "▲" },
-    { name: "TypeScript", icon: "TS" },
-    { name: "Python", icon: "🐍" },
-    { name: "Tailwind CSS", icon: "🎨" },
-    { name: "PostgreSQL", icon: "🐘" },
-    { name: "Supabase", icon: "⚡" },
-    { name: "Node.js", icon: "🟢" },
-    { name: "Figma", icon: "❖" },
-    { name: "Git", icon: "🌿" },
+    { name: "React", icon: "⚛️", category: "Frontend" },
+    { name: "Next.js", icon: "▲", category: "Framework" },
+    { name: "TypeScript", icon: "TS", category: "Langage" },
+    { name: "Python", icon: "🐍", category: "Langage / IA" },
+    { name: "Tailwind CSS", icon: "🎨", category: "Styling" },
+    { name: "PostgreSQL", icon: "🐘", category: "Database" },
+    { name: "Supabase", icon: "⚡", category: "BaaS & Auth" },
+    { name: "Node.js", icon: "🟢", category: "Runtime / API" },
+    { name: "Docker", icon: "🐳", category: "DevOps & Cloud" },
+    { name: "PyTorch", icon: "🔥", category: "Deep Learning" },
+    { name: "Figma", icon: "❖", category: "UI/UX Design" },
+    { name: "Git", icon: "🌿", category: "Version Control" },
   ];
 
   const published = projects.filter((pr) => pr.published);
@@ -887,26 +889,26 @@ export function PortfolioView({
         </section>
 
         {/* TECH STACK & PFE OBJECTIVE SECTION */}
-        <section id="skills" className="site-container orbit-section">
-          <p className="orbit-lead-text reveal visible">
-            {cur.stack.headline} <span className="highlight-text">{cur.stack.highlight}</span> {cur.stack.headlineEnd}
-          </p>
-
-          <div className="tech-icons-row reveal visible">
-            {techStack.map((tech, i) => (
-              <span key={i} className="tech-pill-badge">
-                <span>{tech.icon}</span>
-                <span>{tech.name}</span>
-              </span>
-            ))}
+        <section id="skills" className="site-container stack-grid-section section-spacer">
+          <div className="stack-header-box reveal visible">
+            <span className="section-kicker-clean">STACK TECHNIQUE & OBJECTIF PFE</span>
+            <p className="stack-lead-text">
+              {cur.stack.headline} <span className="highlight-text">{cur.stack.highlight}</span> {cur.stack.headlineEnd}
+            </p>
           </div>
 
-          <div className="orbit-visual-container reveal visible">
-            <div className="orbit-ring orbit-ring-2" />
-            <div className="orbit-ring orbit-ring-1" />
-            <div className="orbit-central-orb">
-              <span>EG</span>
-            </div>
+          <div className="skills-cards-grid reveal visible">
+            {techStack.map((tech, i) => (
+              <div key={i} className="skill-card-square">
+                <div className="skill-card-icon-wrap">
+                  <span className="skill-card-icon">{tech.icon}</span>
+                </div>
+                <div className="skill-card-info">
+                  <h4 className="skill-card-name">{tech.name}</h4>
+                  <span className="skill-card-cat">{tech.category}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 

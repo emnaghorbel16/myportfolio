@@ -703,88 +703,155 @@ img { max-width: 100%; height: auto; display: block; }
 .exp-learn-more-btn:hover { gap: 0.55rem; }
 
 /* ============================================================
-   TECH STACK / ORBIT SECTION
+   TECH STACK & PFE OBJECTIVE SECTION
    ============================================================ */
-.orbit-section {
-  padding-block: 5rem;
+.stack-grid-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-  background: #fff;
+  gap: 3rem;
+  padding-block: 5rem;
 }
-.orbit-lead-text {
+
+.stack-header-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 720px;
+  gap: 0.85rem;
+}
+
+.section-kicker-clean {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #2563eb;
+}
+.section-kicker-clean::before,
+.section-kicker-clean::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 1.5px;
+  background: #bfdbfe;
+}
+
+.stack-lead-text {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(1.25rem, 2.8vw, 1.85rem);
+  font-size: clamp(1.3rem, 2.8vw, 1.95rem);
   font-weight: 700;
   color: #111827;
-  line-height: 1.5;
-  max-width: 620px;
-  text-align: center;
-  letter-spacing: -0.02em;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
 }
 .highlight-text {
   color: #2563eb;
   font-style: italic;
 }
 
-.tech-icons-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
+/* Grille de compétences : 4 carrés par ligne horizontale */
+.skills-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
 }
-.tech-pill-badge {
-  display: inline-flex;
+
+.skill-card-square {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.6rem 1.2rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  text-align: center;
+  gap: 0.85rem;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card-square::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.skill-card-square:hover {
+  transform: translateY(-4px);
+  border-color: #111827;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.skill-card-square:hover::after {
+  background: #2563eb;
+}
+
+.skill-card-icon-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 0.45rem 0.9rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #374151;
-  transition: border-color 0.18s, background 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
-.tech-pill-badge:hover {
-  border-color: #2563eb;
+
+.skill-card-square:hover .skill-card-icon-wrap {
   background: #eff6ff;
-  color: #1d4ed8;
+  border-color: #bfdbfe;
+  transform: scale(1.06);
 }
 
-/* Orbit visual */
-.orbit-visual-container {
-  position: relative;
-  width: 200px; height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-}
-.orbit-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed #d1d5db;
-}
-.orbit-ring-1 { width: 140px; height: 140px; animation: spin-slow 18s linear infinite; }
-.orbit-ring-2 { width: 200px; height: 200px; animation: spin-slow 30s linear infinite reverse; }
-@keyframes spin-slow { to { transform: rotate(360deg); } }
-
-.orbit-central-orb {
-  width: 72px; height: 72px;
-  background: #111827;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Outfit', sans-serif;
+.skill-card-icon {
+  font-size: 1.85rem;
+  line-height: 1;
   font-weight: 800;
-  font-size: 1.2rem;
-  color: #fff;
-  z-index: 1;
+  color: #111827;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.skill-card-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.skill-card-cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7280;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* ============================================================
@@ -2496,40 +2563,38 @@ img { max-width: 100%; height: auto; display: block; }
     padding: 0.18rem 0.55rem;
   }
 
-  /* Orbit / Tech Skills Section */
-  .orbit-section {
+  /* Tech Skills Section (Responsive) */
+  .stack-grid-section {
     padding-block: 3.5rem;
-    gap: 1.75rem;
+    gap: 2rem;
   }
-  .orbit-lead-text {
-    font-size: 1.22rem;
-    padding-inline: 0.25rem;
-    line-height: 1.5;
+  .stack-lead-text {
+    font-size: 1.25rem;
+    padding-inline: 0.5rem;
+    line-height: 1.45;
   }
-  .tech-icons-row {
-    gap: 0.45rem;
+  .skills-cards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.85rem !important;
   }
-  .tech-pill-badge {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    border-radius: 10px;
+  .skill-card-square {
+    padding: 1.25rem 0.85rem !important;
+    gap: 0.65rem !important;
+    border-radius: 12px !important;
   }
-  .orbit-visual-container {
-    width: 160px;
-    height: 160px;
+  .skill-card-icon-wrap {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 10px !important;
   }
-  .orbit-ring-1 {
-    width: 115px;
-    height: 115px;
+  .skill-card-icon {
+    font-size: 1.5rem !important;
   }
-  .orbit-ring-2 {
-    width: 160px;
-    height: 160px;
+  .skill-card-name {
+    font-size: 0.92rem !important;
   }
-  .orbit-central-orb {
-    width: 60px;
-    height: 60px;
-    font-size: 1.15rem;
+  .skill-card-cat {
+    font-size: 0.68rem !important;
   }
 
   /* Featured Projects Section */
